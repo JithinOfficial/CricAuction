@@ -21,13 +21,18 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 11
 
       - name: Build APK
         run: |
           cd extracted
-          chmod +x gradlew
-          ./gradlew clean assembleDebug --stacktrace
+
+          sed -i 's/jcenter()/google()\n        mavenCentral()/g' build.gradle
+
+          wget https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+          unzip gradle-6.7.1-bin.zip
+
+          ./gradle-6.7.1/bin/gradle clean assembleDebug --stacktrace
 
       - name: Find APK
         run: |
