@@ -3,35 +3,55 @@ name: Build APK
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
 
-      - name: Unzip project
+      - name: Unzip Project
         run: |
-          unzip -o JsAuctions_Android_Project.zip -d extracted
-          find extracted -maxdepth 4 -type f | sort
+          unzip -o JsAuctions_GitHub_Build_Ready.zip -d extracted
+          echo "Files extracted:"
+          find extracted -type f | head -100
 
-      - uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
+      - name: Locate Project
+        run: |
+          PROJECT_DIR=$(find extracted -name "gradlew" -type f -exec dirname {} \; | head -n 1)
+
+          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+
+          echo "Detected project:"
+          echo $PROJECT_DIR
+
+          ls -la $PROJECT_DIR
+
       - name: Build APK
         run: |
-          cd extracted/JsAuctions
-          chmod +x ./gradlew
-          ./gradlew clean assembleDebug --stacktrace
-          find . -type f -name "*.apk" -print
+          cd $PROJECT_DIR
 
-      - uses: actions/upload-artifact@v4
+          chmod +x gradlew
+
+          ./gradlew clean assembleDebug --stacktrace
+
+      - name: Find APK
+        run: |
+          find extracted -name "*.apk"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: JsAuctions-debug-apk
           path: extracted/**/*.apk
           if-no-files-found: error
-
