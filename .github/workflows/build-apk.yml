@@ -12,33 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Show files
+      - name: Unzip project
         run: |
-          pwd
-          ls -la
-          find . -maxdepth 4 -type f | sort
+          unzip -o JsAuctions_Android_Project.zip -d extracted
+          find extracted -maxdepth 4 -type f | sort
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
-      - name: Check Gradle
-        run: |
-          ls -la gradlew || true
-          cat settings.gradle || true
-          cat build.gradle || true
-          cat app/build.gradle || true
-
       - name: Build APK
         run: |
+          cd extracted/JsAuctions
           chmod +x ./gradlew
           ./gradlew clean assembleDebug --stacktrace
           find . -type f -name "*.apk" -print
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: JsAuctions-debug-apk
-          path: '**/*.apk'
-          if-no-files-found: error       
+          path: extracted/**/*.apk
+          if-no-files-found: error
+
