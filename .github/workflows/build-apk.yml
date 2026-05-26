@@ -12,21 +12,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Show files
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 4 -type f | sort
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
-      - run: chmod +x ./gradlew
+      - name: Check Gradle
+        run: |
+          ls -la gradlew || true
+          cat settings.gradle || true
+          cat build.gradle || true
+          cat app/build.gradle || true
 
-      - run: ./gradlew assembleDebug
+      - name: Build APK
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean assembleDebug --stacktrace
+          find . -type f -name "*.apk" -print
 
-      - name: Find APK
-        run: find . -name "*.apk"
-
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: JsAuctions-debug-apk
-          path: |
-            **/build/outputs/apk/**/*.apk
-            **/*.apk
+          path: '**/*.apk'
+          if-no-files-found: error       
