@@ -15,7 +15,7 @@ jobs:
 
       - name: Unzip Project
         run: |
-          unzip -o "JsAuctions_AuctionPro_AIDE(1).zip" -d extracted
+          unzip -o "JsAuctions_AuctionPro_AIDE (1).zip" -d extracted
           find extracted -type f | head -100
 
       - uses: actions/setup-java@v4
@@ -27,12 +27,14 @@ jobs:
         run: |
           cd extracted
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew clean assembleDebug --stacktrace
 
       - name: Find APK
-        run: find extracted -name "*.apk"
+        run: |
+          find extracted -name "*.apk"
 
       - uses: actions/upload-artifact@v4
         with:
           name: JsAuctions-debug-apk
           path: extracted/**/*.apk
+          if-no-files-found: error
