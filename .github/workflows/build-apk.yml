@@ -11,47 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Unzip Project
         run: |
-          unzip -o JsAuctions_GitHub_Build_Ready.zip -d extracted
-          echo "Files extracted:"
+          unzip -o "JsAuctions_AuctionPro_AIDE(1).zip" -d extracted
           find extracted -type f | head -100
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
 
-      - name: Locate Project
-        run: |
-          PROJECT_DIR=$(find extracted -name "gradlew" -type f -exec dirname {} \; | head -n 1)
-
-          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
-
-          echo "Detected project:"
-          echo $PROJECT_DIR
-
-          ls -la $PROJECT_DIR
-
       - name: Build APK
         run: |
-          cd $PROJECT_DIR
-
+          cd extracted
           chmod +x gradlew
-
-          ./gradlew clean assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace
 
       - name: Find APK
-        run: |
-          find extracted -name "*.apk"
+        run: find extracted -name "*.apk"
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: JsAuctions-debug-apk
           path: extracted/**/*.apk
-          if-no-files-found: error
