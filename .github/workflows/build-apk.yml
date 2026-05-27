@@ -43,10 +43,11 @@ jobs:
 
           sed -i 's/jcenter()/google()\n        mavenCentral()/g' build.gradle
 
-          wget https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
-          unzip -q gradle-6.7.1-bin.zip
+          wget https://services.gradle.org/distributions/gradle-7.6.1-bin.zip
+          unzip -q gradle-7.6.1-bin.zip
 
-          ./gradle-6.7.1/bin/gradle clean assembleDebug --stacktrace
+          ./gradle-7.6.1/bin/gradle clean assembleDebug --stacktrace
+
 
       - name: Find APK
         run: |
