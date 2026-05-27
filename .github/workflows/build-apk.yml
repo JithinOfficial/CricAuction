@@ -27,13 +27,15 @@ jobs:
         run: |
           cd extracted
 
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+
           sed -i 's/jcenter()/google()\n        mavenCentral()/g' build.gradle
 
           wget https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
-          unzip gradle-6.7.1-bin.zip
+          unzip -q gradle-6.7.1-bin.zip
 
           ./gradle-6.7.1/bin/gradle clean assembleDebug --stacktrace
-
       - name: Find APK
         run: |
           find extracted -name "*.apk"
