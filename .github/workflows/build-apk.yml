@@ -41,13 +41,17 @@ jobs:
         run: |
           cd extracted
 
-          sed -i 's/jcenter()/google()\n        mavenCentral()/g' build.gradle
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+
+          sed -i 's/compileSdk .*/compileSdk 30/g' app/build.gradle
+          sed -i 's/compileSdkVersion .*/compileSdkVersion 30/g' app/build.gradle
+          sed -i 's/targetSdk .*/targetSdk 30/g' app/build.gradle
+          sed -i 's/targetSdkVersion .*/targetSdkVersion 30/g' app/build.gradle
 
           wget https://services.gradle.org/distributions/gradle-7.6.1-bin.zip
           unzip -q gradle-7.6.1-bin.zip
 
           ./gradle-7.6.1/bin/gradle clean assembleDebug --stacktrace
-
 
       - name: Find APK
         run: |
