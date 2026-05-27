@@ -17,7 +17,7 @@ jobs:
       - name: Unzip Project
         run: |
           rm -rf extracted
-          unzip -o "JsAuctions_RDB_Intro_Theme.zip" -d extracted
+          unzip -o "JJ.zip" -d extracted
           find extracted -type f | head -100
 
       - name: Setup Java 17 for SDK Manager
