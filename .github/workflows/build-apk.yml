@@ -15,7 +15,7 @@ jobs:
 
       - name: Unzip Project
         run: |
-          unzip -o "JsAuctions_Premium_Polished_AIDE (1).zip" -d extracted
+          unzip -o "JsAuctions_RDB_Intro_Theme.zip" -d extracted
           find extracted -type f | head -100
 
       - uses: actions/setup-java@v4
