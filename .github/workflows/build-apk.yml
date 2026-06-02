@@ -48,11 +48,10 @@ jobs:
           sed -i 's/targetSdk .*/targetSdk 30/g' app/build.gradle
           sed -i 's/targetSdkVersion .*/targetSdkVersion 30/g' app/build.gradle
 
-          wget https://services.gradle.org/distributions/gradle-7.6.1-bin.zip
-          unzip -q gradle-7.6.1-bin.zip
+          wget https://services.gradle.org/distributions/gradle-8.9-bin.zip
+          unzip -q gradle-8.9-bin.zip
 
-          ./gradle-7.6.1/bin/gradle clean assembleDebug --stacktrace
-
+          ./gradle-8.9/bin/gradle clean assembleDebug --stacktrace
       - name: Find APK
         run: |
           find extracted -name "*.apk"
