@@ -41,17 +41,11 @@ jobs:
         run: |
           cd extracted
 
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-          sed -i 's/compileSdk .*/compileSdk 30/g' app/build.gradle
-          sed -i 's/compileSdkVersion .*/compileSdkVersion 30/g' app/build.gradle
-          sed -i 's/targetSdk .*/targetSdk 30/g' app/build.gradle
-          sed -i 's/targetSdkVersion .*/targetSdkVersion 30/g' app/build.gradle
-
-          wget https://services.gradle.org/distributions/gradle-8.9-bin.zip
-          unzip -q gradle-8.9-bin.zip
-
-          ./gradle-8.9/bin/gradle clean assembleDebug --stacktrace
+          chmod +x gradlew
+          ./gradlew clean assembleDebug --stacktrace
+          
       - name: Find APK
         run: |
           find extracted -name "*.apk"
