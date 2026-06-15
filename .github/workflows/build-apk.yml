@@ -40,6 +40,19 @@ jobs:
           echo "Gradle project found at: $PROJECT_DIR"
           ls -la "$PROJECT_DIR"
 
+      - name: Enable AndroidX
+        run: |
+          cd "$PROJECT_DIR"
+
+          if [ ! -f gradle.properties ]; then
+          touch gradle.properties
+          fi
+
+          grep -q "android.useAndroidX" gradle.properties || echo "android.useAndroidX=true" >> gradle.properties
+          grep -q "android.enableJetifier" gradle.properties || echo "android.enableJetifier=true" >> gradle.properties
+
+          cat gradle.properties
+
       - name: Build APK
         run: |
           cd "$PROJECT_DIR"
