@@ -53,11 +53,16 @@ jobs:
 
           cat gradle.properties
 
+      - name: Fix invalid hintTextColor attributes
+        run: |
+         cd "$PROJECT_DIR"
+         find app/src/main/res/layout -name "*.xml" -type f -exec sed -i 's/android:hintTextColor/android:textColorHint/g' {} +
+
       - name: Build APK
         run: |
-          cd "$PROJECT_DIR"
-          chmod +x gradlew
-          ./gradlew clean assembleDebug --stacktrace
+         cd "$PROJECT_DIR"
+         chmod +x gradlew
+         ./gradlew clean assembleDebug --stacktrace
 
       - name: Find APK
         run: |
